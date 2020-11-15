@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Polling Example</title>
+    <style type="text/css">
+        .title, .result {
+            display: inline-block;
+            padding: 10px;
+            background-color: #fffeee;
+        }
+        .content {
+            padding: 10px;
+            background-color: #fffdd8;
+        }
+    </style>
+</head>
+<body>
+    <p>Simple polling example to detect changes in content</p>
+    <button id="loadajax">Load the COntent</button>
+    <div class="result">
+        <span class="title">Loading...</span>
+        <div class="content">Loading...</div>
+    </div>
+    <script type="text/javascript">
+        //--- Creating a Web Worker Named 'pollingWorker.js' ---//
+        // var pollingWorker = new Worker('pollingWorker.js');
+        
+        // //--- We are Listening to the Worker ---//
+        // pollingWorker.addEventListener('message', function contentReceiverFunc(e) {
+        //     document.querySelector('.result .title').innerText = e.data.title;
+        //     document.querySelector('.result .content').innerHTML = e.data.content;
+        // });
+        // End Worker Code
+        // Try With Out Worker
+        function fetchRandomContent() {
+            //-- We are using FETCH API to get the contents --//
+            fetch('https://en.wikipedia.org/w/api.php?format=json&origin=*&action=query&generator=random&rvprop=content&prop=revisions', {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: "same-origin"
+            }).then(function(promise) {
+                promise.json().then(function(response) {
+                    //--- Parsing Wikipedia data ---//
+                    var data = {},
+                        keys = Object.keys(response.query.pages),
+                        key = keys[0];
+
+                    data.title = response.query.pages[key].title
+                    data.content = response.query.pages[key].revisions[0]["*"]
+                    //--- Parsing Wikipedia data ---//
+
+                    document.querySelector('.result .title').innerText = data.title;
+                    document.querySelector('.result .content').innerHTML = data.content;
+
+
+                    //--- Sending message to our application ---//
+                    // self.postMessage(data);
+                });
+            }, function(error) {
+                console.log('shit!', error);
+            });
+        }
+
+        document.querySelector('#loadajax').addEventListener('click', () => {
+            let count = 0;
+            while(count < 1000){
+                fetchRandomContent();
+                count = count +1;
+            }
+        },false);
+       
+
+    </script>
+</body>
+</html>

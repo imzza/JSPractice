@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>JavaScript Modran API's</title>
+</head>
+<body>
+	<div class="worker">
+		<h1>Checking the Worker API.</h1>
+		<button id="postMessage">Post</button>
+	</div>
+
+	<script>
+		
+		if (window.Worker) {
+			var myWorker = new Worker('worker.js');
+			myWorker.onmessage = function(e) {
+				console.log('e',e.data);
+			  console.log('Message received from main script');
+			  // var workerResult = 'Result: ' + (e.data[0] * e.data[1]);
+			  // console.log('Posting message back to main script');
+			  // postMessage(workerResult);
+			}
+			
+			document.querySelector('#postMessage').addEventListener('click',function(){
+				myWorker.postMessage('Hellenizationo');
+			}, false);
+
+		}
+	</script>	
+</body>
+</html>

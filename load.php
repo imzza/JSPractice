@@ -1,3 +1,11 @@
+<?php 
+// https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
+// https://stackoverflow.com/questions/60289589/intersectionobserver-and-ajax-loaded-content
+// https://www.smashingmagazine.com/2018/01/deferring-lazy-loading-intersection-observer-api/
+$string = file_get_contents("MOCK_DATA.json");
+$users = json_decode($string);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,22 +73,60 @@
 		<button id="postMessage">Post</button>
 	</div>
 	<div class="boxes">
-		<div class="box">
-			<div class="loader"></div>
-		</div>
-		<div class="box">
-			<div class="loader"></div>
-		</div>
-		<div class="box">
-			<div class="loader"></div>
-		</div>
-		<div class="box">
-			<div class="loader"></div>
-		</div>
-		<div class="box">
-			<div class="loader"></div>
-		</div>
+		<?php if (count($users) > 0): ?>
+			<?php foreach ($users as $u): ?>
+				<div class="box loading" id="<?php echo $u->id; ?>" data-id="<?php echo $u->id; ?>">
+					<div class="loader"></div>
+				</div>
+			<?php endforeach ?>
+		<?php endif ?>
 	</div>
+
+
+<script>
+let images = document.querySelectorAll('body .loading');
+if ('IntersectionObserver' in window) {
+    // IntersectionObserver Supported
+    let config = {
+        root: null,
+        rootMargin: '0px 0px', //Y xes px below and X axis ratio  100px 0px
+        threshold: 0.01
+    };
+
+    let observer = new IntersectionObserver(onChange, config);
+    images.forEach(img => observer.observe(img));
+
+    function onChange(changes, observer) {
+        changes.forEach(change => {
+            if (change.intersectionRatio > 0) {
+                // Stop watching and load the image
+                loadImage(change.target);
+                observer.unobserve(change.target);
+            }
+        });
+    }
+} else {
+    images.forEach(image => loadImage(image));
+}
+
+function loadImage(image) {
+    image.classList.remove('loading');
+    image.classList.add('loaded');
+    image.innerHTML = '<p>Loaded</p>';
+
+    console.log('Loading');
+
+
+    //    if (image.dataset && image.dataset.src) {
+    //        image.src = image.dataset.src;
+    //    }
+    //
+    //    if (image.dataset && image.dataset.srcset) {
+    //        image.srcset = image.dataset.srcset;
+    //    }
+}
+</script>
+
 
 <script type="text/js-worker">
   onmessage = function(oEvent) {

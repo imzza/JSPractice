@@ -50,7 +50,7 @@ $users = json_decode($string);
 		  border-top: 5px solid #000;
 		  width: 20px;
 		  height: 20px;
-		  animation: spin 1.5s linear infinite;
+		  animation: spin 3s linear infinite;
 		}
 
 		/* Safari */

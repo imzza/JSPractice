@@ -146,7 +146,33 @@
             getPageData();
 
 
+            // TimeStamptoDate
+            function timeConverter(UNIX_timestamp){
+              var a = new Date(UNIX_timestamp * 1000);
+              var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+              var year = a.getFullYear();
+              var month = months[a.getMonth()];
+              var date = a.getDate();
+              var hour = a.getHours();
+              var min = a.getMinutes();
+              var sec = a.getSeconds();
+              var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+              return time;
+            }
+            console.log(timeConverter(0));
 
+            // Date Diff
+                // This is for first date
+            first = new Date(2010, 03, 08, 15, 30, 10); // Get the first date epoch object
+            document.write((first.getTime())/1000); // get the actual epoch values
+            second = new Date(2012, 03, 08, 15, 30, 10); // Get the first date epoch object
+            document.write((second.getTime())/1000); // get the actual epoch values
+            diff= second - first ;
+            one_day_epoch = 24*60*60 ;  // calculating one epoch
+            if ( diff/ one_day_epoch > 365 ) // check , is it exceei
+            {
+            alert( 'date is exceeding one year');
+            }
         </script>
     </body>
 </html>

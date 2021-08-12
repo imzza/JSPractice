@@ -156,4 +156,3 @@ document.querySelector('#postMessage').addEventListener('click', () => {
   window.onload = function() { document.worker.postMessage({action: 'ajax', data: {key: 1, user: 'John'}}); };
 </script>
 </body>
-</html>

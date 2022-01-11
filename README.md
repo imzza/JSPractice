@@ -6,3 +6,7 @@ https://deanhume.github.io/lazy-observer-load/
 https://www.robinosborne.co.uk/2016/05/16/lazy-loading-images-dont-rely-on-javascript/#a-no-JavaScript
 
 https://www.smashingmagazine.com/2018/01/deferring-lazy-loading-intersection-observer-api/
+
+
+
+https://www.techighness.com/post/javascript-track-user-activity-on-webpage-with-custom-script/

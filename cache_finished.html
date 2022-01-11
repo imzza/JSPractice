@@ -86,25 +86,25 @@
             // https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage
             // Try to get data from the cache, but fall back to fetching it live.
             async function getData() {
-                console.log("New Date", new Date())
-               const cacheVersion = 1;
-               const cacheName    = `myapp-${ cacheVersion }`;
-               const url          = 'https://jsonplaceholder.typicode.com/todos/1';
-               let cachedData     = await getCachedData( cacheName, url );
+              console.log("New Date", new Date())
+              const cacheVersion = 1;
+              const cacheName    = `myapp-${ cacheVersion }`;
+              const url          = 'https://jsonplaceholder.typicode.com/todos/1';
+              let cachedData     = await getCachedData( cacheName, url );
 
-               if ( cachedData ) {
-                  console.log( 'Retrieved cached data' );
-                  return cachedData;
-               }
+              if ( cachedData ) {
+                 console.log( 'Retrieved cached data' );
+                 return cachedData;
+              }
 
                console.log( 'Fetching fresh data' );
 
-               const cacheStorage = await caches.open( cacheName );
-               await cacheStorage.add( url );
-               cachedData = await getCachedData( cacheName, url );
-               await deleteOldCaches( cacheName );
+              const cacheStorage = await caches.open( cacheName );
+              await cacheStorage.add( url );
+              cachedData = await getCachedData( cacheName, url );
+              await deleteOldCaches( cacheName );
 
-               return cachedData;
+              return cachedData;
             }
 
             // Get data from the cache.

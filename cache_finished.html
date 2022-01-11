@@ -16,6 +16,7 @@
                 order to enable web apps to work when offline, they can also be used to store more general data. </p>
             <button id="btnGet">Get JSON Data</button>
             <button id="btnClear">Clear Local Cache</button>
+            <a href="https://googlechrome.github.io/samples/service-worker/window-caches/">https://googlechrome.github.io/samples/service-worker/window-caches/</a>
         </div>
         <script>
             window.addEventListener("load", function () {
@@ -136,6 +137,7 @@
 
             async function getPageData(){
                 try {
+                  console.log("getPageData")
                    const data = await getData();
                    console.log( { data } );
                 } catch ( error ) {

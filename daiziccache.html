@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Cache API Example</title>
+    <!-- TODO: Define the canvas style here -->
+    <style type="text/css">
+    </style>
+    <!-- <link rel="stylesheet" href="../../style.css" /> -->
+    <link rel="shortcut icon" href="#" />
+</head>
+
+<body>
+    <h1>Using the Cache API</h1>
+    <div id="content">
+        <p>The Cache API provides an easy way of storing the results of an HTTP request. Originally created so that
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"
+                target="_blank">ServiceWorkers</a>,
+            which are used to create Progressive Web Apps, could easily cache network requests in
+            order to enable web apps to work when offline, they can also be used to store more general data.
+        </p>
+        <button id="btnGet">Get JSON Data</button>
+        <button id="btnClear">Clear Local Cache</button>
+        <a
+            href="https://googlechrome.github.io/samples/service-worker/window-caches/">https://googlechrome.github.io/samples/service-worker/window-caches/</a>
+    </div>
+    <script>
+        window.addEventListener("load", function () {
+            document.getElementById('btnGet').addEventListener("click", async () => {
+                let url = "https://httpbin.org/json";
+                getJSONData(url);
+            });
+
+            document.getElementById('btnClear').addEventListener("click", async () => {
+                caches.delete("arrsts-3").then(function (result) {
+                    console.log(result ? "cache deleted" : "error clearing cache");
+                })
+            });
+
+            const getCachedData = async (cacheName, url) => {
+                const cacheStorage = await caches.open(cacheName);
+                const cachedResponse = await cacheStorage.match(url);
+                if (!cachedResponse || !cachedResponse.ok) {
+                    return false;
+                }
+                return await cachedResponse.json();
+            }
+            
+            const deleteOldCaches = async (prefix, currentCache) => {
+                const keys = await caches.keys();
+                console.log(keys);
+                for (const key of keys) {
+                    if (key.startsWith(prefix) && key != currentCache) {
+                        caches.delete(key);
+                    }
+                }
+            }
+            
+            const getJSONData = async (url) => {
+                if ('caches' in window) {
+                    const cacheVersion = 3;
+                    const prefix="arrsts-"
+                    const cacheName = `${prefix}${cacheVersion}`;
+                    // const url = 'https://jsonplaceholder.typicode.com/todos/1';
+                    // const url = "http://ec2-34-221-233-130.us-west-2.compute.amazonaws.com/api/daizic-com/get-cache-key";
+                    const url = "http://ec2-34-221-233-130.us-west-2.compute.amazonaws.com/api/daizic-com/artist-stats";
+                    
+                    let cachedData = await getCachedData(cacheName, url);
+
+                    if (cachedData) {
+                        console.log('Retrieved cached data');
+                        return cachedData;
+                    }
+
+                    console.log('Fetching fresh data');
+
+                    const cacheStorage = await caches.open(cacheName);
+                    let result = await fetch(url);
+                    let clonedresp = result.clone();
+                    await cacheStorage.put(url, result);
+                    let finalResult = await clonedresp.json();
+                    await deleteOldCaches(prefix, cacheName);
+                    
+                    return finalResult;
+                }else{
+                    let result = await fetch(url);
+                    let finalResult = await result.json();
+                    return finalResult;
+                }
+            }
+
+        });
+    </script>
+</body>
+
+</html>

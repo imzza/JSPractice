@@ -2,8 +2,12 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
 // https://stackoverflow.com/questions/60289589/intersectionobserver-and-ajax-loaded-content
 // https://www.smashingmagazine.com/2018/01/deferring-lazy-loading-intersection-observer-api/
+// Intersection Observer in React JS
+// https://github.com/mayankshubham/react-lazy-loading-image
+
 $string = file_get_contents("MOCK_DATA.json");
 $users = json_decode($string);
+
 ?>
 
 <!DOCTYPE html>

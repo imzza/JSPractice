@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="main">
+
+  </div>
+
+  <input type="text" id="txtMACAdress" />
+  <input type="text" id="txtComputerName" />
+
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(){
+      console.log("Page loaded");
+
+      console.log(navigator.deviceMemory)
+
+      let pageElement = document.querySelector("body #main");
+      console.log(pageElement.innerHTML);
+      document.addEventListener("visibilitychange", function(e) {
+        pageElement.innerHTML += "<p>"+ document.visibilityState + "</p>";
+      });
+
+      window.addEventListener("load", updateState);
+      window.addEventListener("offline", updateState);
+      window.addEventListener("online", updateState);
+
+      function updateState(evt) {
+        let isOnline = navigator.onLine;
+        pageElement.innerHTML = isOnline ? "ONLINE" : "OFFLINE";
+        if(navigator.connection){
+          conType = navigator.connection;
+          str = conType.downlink + "MB/s" + conType.effectiveType + " "+ conType.rtt + " saveData" + conType.saveData
+          pageElement.innerHTML = str
+        }
+      }
+
+      navigator.connection.addEventListener("change", updateState)
+      navigator.connection.addEventListener("typechange", updateState)
+
+
+      navigator.sendBeacon('http://www.google.com', {"name": "john"})
+    
+
+    });
+  </script>
+</body>
+</html>
